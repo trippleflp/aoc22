@@ -112,6 +112,7 @@ function anUglyStar(start: Point, grid: Map<string, Node>) {
     if (!node) break;
     if (node.x === end.x && node.y === end.y) {
       endNode = node;
+      break;
     }
     node.neighbours.forEach((n) => {
       const checkG = node.g + 1;
