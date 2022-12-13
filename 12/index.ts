@@ -1,5 +1,5 @@
-let start: Point = { x: 0, y: 0 };
-let end: Point = { x: 0, y: 0 };
+let start: Point = { x: 0, y: 0, height: 0 };
+let end: Point = { x: 0, y: 0, height: 0 };
 const grid = new Map<string, Node>();
 
 Deno.readTextFileSync("12/input.txt")
@@ -9,10 +9,10 @@ Deno.readTextFileSync("12/input.txt")
       .split("")
       .map((c, x) => {
         if (c === "S") {
-          start = { x, y };
+          start = { x, y, height: 0 };
           c = "a";
         } else if (c === "E") {
-          end = { x, y };
+          end = { x, y, height: 25 };
           c = "z";
         }
         return c.charCodeAt(0) % 97;
@@ -41,10 +41,10 @@ function toKey(a: any, b?: any) {
 type Point = {
   x: number;
   y: number;
+  height: number;
 };
 
 type Node = Point & {
-  height: number;
   h: number;
   g: number;
   neighbours: Array<Node>;
@@ -55,7 +55,8 @@ const D = 1;
 function heuristic(node: Point, goal: Point) {
   const dx = Math.abs(node.x - goal.x);
   const dy = Math.abs(node.y - goal.y);
-  return D * (dx + dy);
+  const dz = Math.abs(node.height - goal.height);
+  return D * (dx + dy + dz * 2);
 }
 
 [...grid.entries()].map(([key, val]) => {
